@@ -1,0 +1,13 @@
+{
+  "name": "todo_test-backend",
+  "version": "0.1.0",
+  "private": true,
+  "proxy": "http://localhost:3001/",
+  "dependencies": {
+    "express": "^4.17.1",
+    "pg": "^7.12.1"
+  },
+  "devDependencies": {
+    "concurrently": "^4.1.2"
+  }
+}
