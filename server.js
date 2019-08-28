@@ -25,21 +25,21 @@ const checkRoles = (roles) => {
 };
 
 const checkUserPermissions = () => (req, res, next) => {
-    const pageId = req.params.id;
-    const authId = req.user.id;
+    const pageId = parseInt(req.params.id);
+    const authId = req.user.authUserId;
     const role = req.user.role;
     if (pageId === authId || role === 'ADMIN') {
         next();
     } else {
-        throw new Error('You are not administrator');
+        throw new Error('You are not administrator'); // fix that, user can get info about other, but dont edit
     };
 };
 
-app.get('/api', passport.authenticate('jwt', { session: false }), checkRoles(['ADMIN', 'USER']), (req, res) => db.getUsers(req, res));
-app.get('/user/:id', passport.authenticate('jwt', { session: false }), checkUserPermissions(), (req, res) => db.getUserById(req, res));
-app.post('/form', passport.authenticate('jwt', { session: false }), checkRoles(['ADMIN']), (req, res) => db.createUser(req, res));
-app.put('/edit/user/:id', passport.authenticate('jwt', { session: false }), checkUserPermissions(), (req, res) => db.updateUser(req, res));
-app.delete('/delete', passport.authenticate('jwt', { session: false }), checkRoles(['ADMIN']), (req, res) => db.deleteUser(req, res));
+app.get('/users', passport.authenticate('jwt', { session: false }), checkRoles(['ADMIN', 'USER']), (req, res) => db.getUsers(req, res));
+app.get('/user/:id', passport.authenticate('jwt', { session: false }), checkRoles(['ADMIN', 'USER']), (req, res) => db.getUserById(req, res));
+app.post('/users', passport.authenticate('jwt', { session: false }), checkRoles(['ADMIN']), (req, res) => db.createUser(req, res));
+app.put('/user/:id', passport.authenticate('jwt', { session: false }), checkUserPermissions(), (req, res) => db.updateUser(req, res));
+app.delete('/users', passport.authenticate('jwt', { session: false }), checkRoles(['ADMIN']), (req, res) => db.deleteUser(req, res));
 app.post('/register', db.registerUser);
 app.post('/login', db.loginUser);
 
